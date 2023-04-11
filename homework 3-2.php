@@ -3,22 +3,29 @@
 <body>
 
 <?php
-
 $n = 30;
-
-$random_numbers = array();
-for ($i = 0; $i < $n; $i++) {
-  $random_numbers[] = rand(10, 100);
-}
-
-sort($random_numbers);
-
-echo "정렬: ";
-foreach ($random_numbers as $num) {
-  echo $num . " ";
+for($x = 0; $x < $n; $x++) {
+  $data[$x]=rand(0, 100);
+  echo "$data[$x] ";
 }
 echo "<br><br>";
+
+for($y=1; $y<$n; $y++) {
+  for($x=0; $x<$n-$y; $x++) {
+    if($data[$x]>$data[$x+1]) {
+      $tmp=$data[$x];
+      $data[$x]=$data[$x+1];
+      $data[$x+1]=$tmp;
+    }
+  }
+  for($x=0; $x<$n; $x++) {
+    echo "$data[$x] ";
+  }
+  echo "<br>";
+}
+
 ?>
 
 </body>
 </html>
+
