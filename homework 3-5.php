@@ -40,6 +40,7 @@ if(isset($_POST['y']) && strlen($_POST['y']) > 0 && isset($_POST['m']) && strlen
         }
         echo "</table>";
         echo "<br/>";
+    }
 }
 else {	
     echo "<script>alert(\"올바른 날짜형식을 입력해 주세요\");</script>"; 	
