@@ -2,68 +2,49 @@
 <html>
 <body>
 
-<?php 
-	$year = isset($_GET['year']) ? $_GET['year'] : date('Y');
-	$month = isset($_GET['month']) ? $_GET['month'] : date('m');
-
-	$date = "$year-$month-01";
-	$time = strtotime($date); 
-	$start_week = date('w', $time); 
-	$total_day = date('t', $time);
-	$total_week = ceil(($total_day + $start_week) / 7); 
-?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>calendar</title>
-	<style type="text/css">
-		table {
-			border-spacing: 0;
-		}
-		table td {
-			text-align: center;
-		}
-	</style>
-</head>
-<body>
-	<?php echo "$year 년 $month 월" ?>
-	<?php if ($month == 1): ?>
-		<a href="/?year=<?php echo $year-1 ?>&month=12">이전 달</a>
-	<?php else: ?>
-		<a href="/?year=<?php echo $year ?>&month=<?php echo $month-1 ?>">이전 달</a>
-	<?php endif ?>
-
-	<?php if ($month == 12): ?>
-		<a href="/?year=<?php echo $year+1 ?>&month=1">다음 달</a>
-	<?php else: ?>
-		<a href="/?year=<?php echo $year ?>&month=<?php echo $month+1 ?>">다음 달</a>
-	<?php endif ?>
-
-
-	<table border="1">
-		<tr> 
-			<th>일</th> 
-			<th>월</th> 
-			<th>화</th> 
-			<th>수</th> 
-			<th>목</th> 
-			<th>금</th> 
-			<th>토</th> 
-		</tr> 
-
-		<?php for ($n = 1, $i = 0; $i < $total_week; $i++): ?> 
-			<tr> 
-				<?php for ($k = 0; $k < 7; $k++): ?> 
-					<td> 
-						<?php if ( ($n > 1 || $k >= $start_week) && ($total_day >= $n) ): ?>
-							<?php echo $n++ ?>
-						<?php endif ?>
-					</td> 
-				<?php endfor; ?> 
-			</tr> 
-		<?php endfor; ?> 
-	</table>
+<form action="calendar.php" method="post">
+년(年)을 입력하세요 : <input type="number" name="y" /><br />
+월(月)을 입력하세요 : <input type="number" name="m" /><br />
+<input type="submit" value="확인" />
+</form>
+<?php
+if(isset($_POST['y']) && strlen($_POST['y']) > 0 && isset($_POST['m']) && strlen($_POST['m']) > 0) {
+    $m = $_POST["m"];
+    $y = $_POST["y"];
+    if(checkdate($m,1,$y)) {
+        $firstweekday = getDate(mktime(0,0,0,$m,1,$y)); //해당 월 1일의 요일
+        $firstweekday = $firstweekday['wday'];
+        $lastday = date("t", mktime(0,0,0,$m,1,$y)); //t = 주어진 월의 총 일 수(ex : 2014년 1월 = "31" 일)
+        $fc = ceil(($firstweekday+$lastday)/7); //총 주의 수
+        $count = $fc*7; //for 문 count
+        $j=1;
+        echo "<table border='1' width=\"500\" bordercolor=\"#0000FF\">";
+        echo "<tr bgcolor=\"#66FFFF\" align=\"center\"><td colspan=\"7\">". $y."년 ".$m."월 달력</td></tr>";
+        echo "<tr align=\"right\" bgcolor=\"#FF99FF\"><td>일</td><td>월</td><td>화</td><td>수</td><td>목</td><td>금</td><td>토</td></tr>";
+        for($i=1; $i<=$count; $i++){
+            if($i%7==1){
+                echo "<tr>";
+            }
+            echo "<td>";
+            if($i>$firstweekday && $j<=$lastday){
+                echo $j;
+                $j++;
+            }
+            else{
+                echo "&nbsp;";
+            }
+            echo "</td>";
+            if($i%7==0){
+                echo "</tr>";
+            }
+        }
+        echo "</table>";
+        echo "<br/>";
+}
+else {	
+    echo "<script>alert(\"올바른 날짜형식을 입력해 주세요\");</script>"; 	
+}
+}
+ ?>
 </body>
 </html>
