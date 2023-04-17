@@ -8,7 +8,7 @@
 <input type="submit" value="확인" />
 </form>
 <?php
-if(isset($_POST['y']) && strlen($_POST['y']) > 0 && isset($_POST['m']) && strlen($_POST['m']) > 0) {
+if(isset($_POST['y']) && strlen($_POST['y']) > 0 && isset($_POST['m']) && strlen($_POST['m']) > 0 && strlen($_POST['m']) < 13) {
     $m = $_POST["m"];
     $y = $_POST["y"];
     if(checkdate($m,1,$y)) {
